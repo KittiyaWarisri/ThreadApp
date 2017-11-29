@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 URL url = null;
                 try {
 
-                    url =new URL("https://www.allkpop.com/upload/2017/03/af_org/Big-Bang-TOP_1489028141_af_org.jpg");
+                    url =new URL("http://s.isanook.com/wo/0/ud/4/21581/a3.jpg");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -61,33 +62,36 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
     }
-    public void  AsyncTask(View v){
-        new LoadImageTask().execute("http://s.isanook.com/wo/0/ud/4/21581/a3.jpg");
+    public void AsyncTask(View view) {
+        new  LoadImageTask().execute("https://thinkofliving.com/forum/?qa=blob&qa_blobid=15541763916642436857");
     }
 
-    private class LoadImageTask extends AsyncTask<String,Void,Bitmap> {
+    public class LoadImageTask extends AsyncTask<String,Integer, Bitmap> {
+
+
         @Override
-        protected Bitmap doInBackground(String...urls) {
+        protected Bitmap doInBackground(String... urls) {
             URL url = null;
             try {
-                url = new URL("http://s.isanook.com/wo/0/ud/4/21581/a3.jpg");
-                InputStream is = url.openConnection().getInputStream();
-                Bitmap bitMap = BitmapFactory.decodeStream(is);
-                return bitMap;
-
+                url = new URL(urls[0]);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+            }
+            Bitmap bmp = null;
+            try {
+                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
-            //return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            return bmp;
         }
-        protected void onPostExcute(Bitmap result) {
-            super.onPostExecute(result);
-            img.setImageBitmap(result);
+        protected void onPostExecute(Bitmap result)  {
+
+            ImageView imageView = (ImageView)findViewById(R.id.imageView);
+            imageView.setImageBitmap(result);
         }
 
     }
+
 
 }
